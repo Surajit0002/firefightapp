@@ -193,7 +193,7 @@ export default function Dashboard() {
                     <Avatar className="w-10 h-10">
                       <AvatarImage src={user.avatar} />
                       <AvatarFallback className="bg-fire-red text-white">
-                        {user.fullName.split(' ').map((n: string) => n[0]).join('')}
+                        {user.fullName?.split(' ').map((n: string) => n[0]).join('') || user.username?.charAt(0).toUpperCase() || 'U'}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
