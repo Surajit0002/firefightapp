@@ -156,7 +156,7 @@ export default function Help() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Response Time:</span>
-                  <span className="font-semibold text-green-600">< 2 hours</span>
+                  <span className="font-semibold text-green-600">&lt; 2 hours</span>
                 </div>
               </div>
             </CardContent>
