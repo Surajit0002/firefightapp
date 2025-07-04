@@ -6,115 +6,66 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Flame, Eye, EyeOff, CheckCircle } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
-import { toast } from "@/hooks/use-toast";
-import { getCountryFlag } from "@/lib/utils";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Flame, Eye, EyeOff } from "lucide-react";
+import { useAuth } from "@/lib/auth";
+import { useToast } from "@/hooks/use-toast";
+import { countries } from "@/lib/countries";
+
+const registerSchema = z.object({
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  confirmPassword: z.string().min(1, "Please confirm your password"),
+  phone: z.string().optional(),
+  country: z.string().min(1, "Please select your country"),
+  referralCode: z.string().optional(),
+  agreeToTerms: z.boolean().refine(val => val === true, "You must agree to the terms"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function Register() {
   const [, setLocation] = useLocation();
-  const { register } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
+  const { register: registerUser } = useAuth();
+  const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    fullName: "",
-    username: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-    country: "IN",
-    agreeToTerms: false,
+  const [isLoading, setIsLoading] = useState(false);
+
+  const form = useForm<RegisterForm>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      phone: "",
+      country: "",
+      referralCode: "",
+      agreeToTerms: false,
+    },
   });
 
-  const countries = [
-    { code: "IN", name: "India" },
-    { code: "US", name: "United States" },
-    { code: "GB", name: "United Kingdom" },
-    { code: "CA", name: "Canada" },
-    { code: "AU", name: "Australia" },
-    { code: "DE", name: "Germany" },
-    { code: "FR", name: "France" },
-    { code: "BR", name: "Brazil" },
-    { code: "JP", name: "Japan" },
-    { code: "KR", name: "South Korea" },
-  ];
-
-  const passwordRequirements = [
-    { text: "At least 6 characters", met: formData.password.length >= 6 },
-    { text: "Contains a number", met: /\d/.test(formData.password) },
-    { text: "Contains a letter", met: /[a-zA-Z]/.test(formData.password) },
-  ];
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Validation
-    if (!formData.fullName || !formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
-      toast({
-        title: "Error",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      toast({
-        title: "Error",
-        description: "Passwords do not match",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (formData.password.length < 6) {
-      toast({
-        title: "Error",
-        description: "Password must be at least 6 characters long",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!formData.agreeToTerms) {
-      toast({
-        title: "Error",
-        description: "Please agree to the terms and conditions",
-        variant: "destructive",
-      });
-      return;
-    }
-
+  const onSubmit = async (data: RegisterForm) => {
     setIsLoading(true);
     try {
-      await register({
-        fullName: formData.fullName,
-        username: formData.username,
-        email: formData.email,
-        phone: formData.phone,
-        password: formData.password,
-        confirmPassword: formData.confirmPassword,
-        country: formData.country,
-        walletBalance: 0,
-        bonusCoins: 100, // Welcome bonus
-        totalWins: 0,
-        totalMatches: 0,
-        currentRank: 0,
-        isActive: true,
-        isAdmin: false,
-      });
-      
+      const { confirmPassword, agreeToTerms, ...registerData } = data;
+      await registerUser(registerData);
       toast({
         title: "Welcome to Fire Fight!",
-        description: "Your account has been created successfully. You've received 100 bonus coins!",
+        description: "Your account has been created successfully.",
       });
       setLocation("/");
-    } catch (error) {
+    } catch (error: any) {
       toast({
-        title: "Registration Failed",
-        description: "This email or username is already taken",
+        title: "Registration failed",
+        description: error.message || "Something went wrong",
         variant: "destructive",
       });
     } finally {
@@ -123,236 +74,223 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left Side - Hero */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-fire-red to-fire-yellow relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-20"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080')"
-          }}
-        ></div>
-        <div className="relative z-10 flex flex-col justify-center items-center text-white p-12">
-          <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mb-8">
-            <Flame className="w-12 h-12" />
-          </div>
-          <h1 className="text-4xl font-bold mb-4 text-center">Join Fire Fight Today</h1>
-          <p className="text-xl text-center mb-8 text-white/90">
-            Create your account and start competing in exciting gaming tournaments
-          </p>
-          
-          {/* Benefits */}
-          <div className="space-y-4 text-left">
-            <div className="flex items-center space-x-3">
-              <CheckCircle className="w-6 h-6 text-green-400" />
-              <span>100 Welcome Bonus Coins</span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <CheckCircle className="w-6 h-6 text-green-400" />
-              <span>Free Tournament Entry</span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <CheckCircle className="w-6 h-6 text-green-400" />
-              <span>Referral Rewards Program</span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <CheckCircle className="w-6 h-6 text-green-400" />
-              <span>Team Creation & Management</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Right Side - Registration Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-        <div className="w-full max-w-md">
-          {/* Mobile Logo */}
-          <div className="lg:hidden text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-r from-fire-red to-fire-yellow rounded-full flex items-center justify-center mx-auto mb-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-yellow-500 rounded-lg flex items-center justify-center">
               <Flame className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-2xl font-bold fire-red">Fire Fight</h1>
+            <span className="text-2xl font-bold text-red-500">Fire Fight</span>
           </div>
+          <h1 className="text-2xl font-bold text-gray-900">Join the Battle</h1>
+          <p className="text-gray-600">Create your gaming account</p>
+        </div>
 
-          <Card className="shadow-lg">
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-              <p className="text-gray-600">Join the gaming community today</p>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="fullName">Full Name *</Label>
-                    <Input
-                      id="fullName"
-                      value={formData.fullName}
-                      onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
-                      placeholder="John Doe"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="username">Username *</Label>
-                    <Input
-                      id="username"
-                      value={formData.username}
-                      onChange={(e) => setFormData(prev => ({ ...prev, username: e.target.value }))}
-                      placeholder="johndoe"
-                      required
-                    />
-                  </div>
-                </div>
-                
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-center">Create Account</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="email">Email *</Label>
+                  <Label htmlFor="username">Username</Label>
+                  <Input
+                    id="username"
+                    placeholder="Choose username"
+                    {...form.register("username")}
+                  />
+                  {form.formState.errors.username && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {form.formState.errors.username.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
                     type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                    placeholder="john@example.com"
-                    required
+                    placeholder="Enter your email"
+                    {...form.register("email")}
                   />
+                  {form.formState.errors.email && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {form.formState.errors.email.message}
+                    </p>
+                  )}
                 </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                      placeholder="+91 9876543210"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="country">Country *</Label>
-                    <Select value={formData.country} onValueChange={(value) => setFormData(prev => ({ ...prev, country: value }))}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {countries.map((country) => (
-                          <SelectItem key={country.code} value={country.code}>
-                            <div className="flex items-center space-x-2">
-                              <span className="text-lg">{getCountryFlag(country.code)}</span>
-                              <span>{country.name}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="password">Password *</Label>
+                  <Label htmlFor="password">Password</Label>
                   <div className="relative">
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
-                      value={formData.password}
-                      onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
-                      placeholder="Enter your password"
-                      required
+                      placeholder="Create password"
+                      {...form.register("password")}
                     />
                     <Button
                       type="button"
                       variant="ghost"
-                      size="icon"
-                      className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
-                  
-                  {/* Password Requirements */}
-                  {formData.password && (
-                    <div className="mt-2 space-y-1">
-                      {passwordRequirements.map((req, index) => (
-                        <div key={index} className="flex items-center space-x-2 text-xs">
-                          <CheckCircle className={`w-3 h-3 ${req.met ? 'text-green-500' : 'text-gray-300'}`} />
-                          <span className={req.met ? 'text-green-700' : 'text-gray-500'}>{req.text}</span>
-                        </div>
-                      ))}
-                    </div>
+                  {form.formState.errors.password && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {form.formState.errors.password.message}
+                    </p>
                   )}
                 </div>
-                
+
                 <div>
-                  <Label htmlFor="confirmPassword">Confirm Password *</Label>
+                  <Label htmlFor="confirmPassword">Confirm Password</Label>
                   <div className="relative">
                     <Input
                       id="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
-                      value={formData.confirmPassword}
-                      onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                      placeholder="Confirm your password"
-                      required
+                      placeholder="Confirm password"
+                      {...form.register("confirmPassword")}
                     />
                     <Button
                       type="button"
                       variant="ghost"
-                      size="icon"
-                      className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     >
-                      {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {showConfirmPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
-                  {formData.confirmPassword && formData.password !== formData.confirmPassword && (
-                    <p className="text-xs text-red-500 mt-1">Passwords do not match</p>
+                  {form.formState.errors.confirmPassword && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {form.formState.errors.confirmPassword.message}
+                    </p>
                   )}
                 </div>
-                
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="terms"
-                    checked={formData.agreeToTerms}
-                    onCheckedChange={(checked) => setFormData(prev => ({ ...prev, agreeToTerms: checked as boolean }))}
-                  />
-                  <Label htmlFor="terms" className="text-sm">
-                    I agree to the{" "}
-                    <Button variant="link" className="text-fire-red hover:text-fire-red/80 p-0 h-auto">
-                      Terms of Service
-                    </Button>
-                    {" "}and{" "}
-                    <Button variant="link" className="text-fire-red hover:text-fire-red/80 p-0 h-auto">
-                      Privacy Policy
-                    </Button>
-                  </Label>
-                </div>
-                
-                <Button
-                  type="submit"
-                  disabled={isLoading || !formData.agreeToTerms}
-                  className="w-full bg-fire-red hover:bg-fire-red/90"
-                >
-                  {isLoading ? "Creating Account..." : "Create Account"}
-                </Button>
-              </form>
+              </div>
 
-              <div className="mt-6 text-center">
-                <p className="text-gray-600">
-                  Already have an account?{" "}
-                  <Link href="/login">
-                    <Button variant="link" className="text-fire-red hover:text-fire-red/80 p-0">
-                      Sign in
-                    </Button>
-                  </Link>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="phone">Phone (Optional)</Label>
+                  <Input
+                    id="phone"
+                    placeholder="Your phone number"
+                    {...form.register("phone")}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="country">Country</Label>
+                  <Select 
+                    value={form.watch("country")} 
+                    onValueChange={(value) => form.setValue("country", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {countries.map((country) => (
+                        <SelectItem key={country.code} value={country.code}>
+                          <div className="flex items-center space-x-2">
+                            <span>{country.flag}</span>
+                            <span>{country.name}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {form.formState.errors.country && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {form.formState.errors.country.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="referralCode">Referral Code (Optional)</Label>
+                <Input
+                  id="referralCode"
+                  placeholder="Enter referral code"
+                  {...form.register("referralCode")}
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                  Enter a friend's referral code to get ₹25 bonus
                 </p>
               </div>
-            </CardContent>
-          </Card>
 
-          {/* Security Notice */}
-          <div className="mt-6 text-center text-xs text-gray-500">
-            <p>By creating an account, you'll receive 100 bonus coins to get started!</p>
-          </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="terms"
+                  checked={form.watch("agreeToTerms")}
+                  onCheckedChange={(checked) => form.setValue("agreeToTerms", checked as boolean)}
+                />
+                <Label htmlFor="terms" className="text-sm">
+                  I agree to the{" "}
+                  <a href="#" className="text-red-500 hover:underline">
+                    Terms of Service
+                  </a>{" "}
+                  and{" "}
+                  <a href="#" className="text-red-500 hover:underline">
+                    Privacy Policy
+                  </a>
+                </Label>
+              </div>
+              {form.formState.errors.agreeToTerms && (
+                <p className="text-red-500 text-sm">
+                  {form.formState.errors.agreeToTerms.message}
+                </p>
+              )}
+
+              <Button
+                type="submit"
+                className="w-full bg-red-500 hover:bg-red-600"
+                disabled={isLoading}
+              >
+                {isLoading ? "Creating account..." : "Create Account"}
+              </Button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600">
+                Already have an account?{" "}
+                <Link href="/login" className="text-red-500 hover:underline font-semibold">
+                  Sign in
+                </Link>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="mt-8 text-center">
+          <p className="text-xs text-gray-500">
+            By creating an account, you agree to our{" "}
+            <a href="#" className="text-red-500 hover:underline">
+              Terms of Service
+            </a>{" "}
+            and{" "}
+            <a href="#" className="text-red-500 hover:underline">
+              Privacy Policy
+            </a>
+          </p>
         </div>
       </div>
     </div>
