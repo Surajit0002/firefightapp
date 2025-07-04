@@ -1,0 +1,201 @@
+Design and generate a **fully responsive, modern, advanced full-stack web app** for a competitive gaming tournament platform called **Fire Fight**. The website should include:
+
+🎮 **Front-End Stack:**
+- React.js + Tailwind CSS + React Router DOM
+- Solid light theme color palette (base: white, gray-100, gray-900, primary-red-500, accent-yellow-500, blue-500)
+- Mobile-first layout with full responsive grid system
+- All components styled with Tailwind and matching iconography using lucide-react or HeroIcons
+- Font: 'Poppins' or 'Inter' for clean modern feel
+
+🌐 **Back-End (to be API-ready):**
+- Use Axios calls, auth tokens (JWT-ready)
+- Assume MongoDB or PostgreSQL for schema design
+- REST/GraphQL ready routing
+- Modular folder structure
+
+🧑‍💻 USER SIDE PAGES:
+
+1. **Home Page**
+   - Hero Section with 3-slider carousel: Game backgrounds + CTA
+   - Game Categories: Grid of 6 cards (Free Fire, PUBG, COD, Apex Legends, etc.)
+   - Featured Tournaments: Scrollable cards
+   - Top Players: Horizontal avatars + stats
+   - How It Works (Step-by-step)
+   - Referral Bonus Section
+   - Footer: About, Help, Contact, Socials
+
+2. **Tournaments Page**
+   - Left Side Toggle Filter: Game, Entry Fee, Mode, Prize
+   - Right Side: Grid of Tournament Cards (Game thumbnail, title, entry, prize, join button)
+   - Each Card has status badge: LIVE / UPCOMING / ENDED
+
+3. **Tournament Details Page**
+   - Hero: Game Banner + Tournament Title + Info
+   - Details: Entry fee, prize pool, schedule, match type
+   - Join Modal: Checks wallet, select team or create new
+   - Tabs: Rules, Participants, Room Details, Results, Leaderboard
+   - Result Section: Live Room Code, Participant Grid, Scoreboard
+
+4. **Teams Page**
+   - Tabs: My Teams, Global Teams
+   - Create Team Modal: Logo upload, name, country (with react-world-flags), players grid (6 cards)
+   - Join Team Modal: Enter Code
+   - Team Cards: Logo, Name, Flag, Join Code + Copy icon, Stats grid
+   - Team Member Row: Horizontal profile icons with hover name
+   - Edit/View/Delete via 3-dot dropdown
+   - Add/Remove player from card directly
+
+5. **Wallet Page**
+   - Dynamic wallet balance (INR & Coin)
+   - Add/Withdraw with Modal
+   - UPI/Paytm payment
+   - Transactions History Table
+   - Bonus Logs (Referral, Tournament Win)
+   - Payment success/fail animation UI
+
+6. **Profile Page**
+   - User Avatar, Name, Country
+   - Game Stats Cards (Wins, Played, Rank)
+   - Security Tab: Password change, 2FA toggle
+   - Referral Tab: Show user referral code + history
+   - Game Preferences Tags
+
+7. **Leaderboard Page**
+   - Filters: Game, Weekly, Monthly
+   - Global Leaderboard Table
+   - Top 3 Highlighted with trophy icons
+   - Avatars, Team Name, Points
+
+8. **Match Room Page (After Join)**
+   - Room Code (with Copy button)
+   - Password field
+   - List of all Teams and Players
+   - Countdown Timer
+   - Live Result Table / YouTube Embed
+
+9. **Referral & Rewards Page**
+   - How to earn
+   - Share via WhatsApp/Facebook
+   - Referral stats
+   - Rewards history list
+
+10. **Help & Support Page**
+   - FAQ Accordion
+   - Submit Ticket Modal
+   - Contact Form
+   - Live Chat Button
+
+---
+
+🧑‍💼 ADMIN PANEL (`/admin`):
+
+1. **Admin Dashboard**
+   - Summary Cards: Total Players, Active Tournaments, Revenue, Matches
+   - Charts: Player Growth, Daily Income
+   - Notifications Feed
+   - Sidebar Navigation Menu
+
+2. **Tournament Management**
+   - Create Tournament Form (Game, Title, Prize Pool, Mode, Entry Fee, Slots, Schedule, Room Code)
+   - Tournament List Table: Filters, Sort
+   - View Details Button
+   - Edit/Update/Close Tournament
+   - Upload Result
+   - View Joined Teams & Players
+
+3. **Team Management**
+   - Table of All Teams
+   - View Team: Logo, Country, Players
+   - Edit/Delete Team
+   - Ban or Verify Team (Toggle)
+
+4. **User Management**
+   - Table of Registered Users
+   - Search, Sort, Filter by Game, Status
+   - View Profile, Ban, Suspend
+   - Wallet Access Control
+
+5. **Wallet Management**
+   - All Transactions Log
+   - Pending Withdrawals
+   - Add Credit/Bonus Coins
+   - Manage Payment Settings
+
+6. **CMS / Content Pages**
+   - Manage Home Page Banners
+   - Manage FAQ, About, T&C Pages
+   - Add/Remove Testimonials
+   - Contact Messages Viewer
+
+7. **Notifications Center**
+   - Send Notification to: All, Game-specific, Role-specific
+   - Push Notification Templates
+   - Preview before sending
+
+8. **Reports**
+   - Export PDF/CSV Reports: Revenue, Tournament Stats
+   - Daily/Weekly/Monthly
+
+9. **Live Logs Panel**
+   - Match Participation Logs
+   - Result Update Logs
+   - Admin Actions Log
+
+10. **Settings Panel**
+   - Site-wide Settings (Logo, Title, Meta, Social Links)
+   - Admin Roles & Permissions
+
+---
+
+🎨 UI/UX Notes:
+- Use Tailwind utility-first grid: 2x3, 3x3, 4x4 views depending on section
+- All cards: Hover effects, elevation, shadows
+- Use dynamic badges, rounded avatars, soft shadows, glowing highlights
+- Highlight key numbers (Coins, Players, Prize Pool) with bold gradient text
+- Use `lucide-react` or `heroicons` for icons
+- Use Next/Image or CDN for optimized image loading
+
+---
+
+📊 Metadata Types (10+ examples):
+1. `og:title` – Fire Fight: Esports Gaming Tournaments
+2. `og:description` – Play & Win in Free Fire, PUBG, COD Custom Rooms
+3. `og:image` – Game Thumbnail
+4. `og:type` – website
+5. `og:url` – https://firefight.gg
+6. `twitter:title` – Join Fire Fight Battles
+7. `twitter:description` – Compete & Earn Real Rewards
+8. `keywords` – Fire Fight, Free Fire Tournament, PUBG Events, COD Customs
+9. `robots` – index, follow
+10. `theme-color` – #f43f5e
+11. `viewport` – width=device-width, initial-scale=1.0
+
+---
+
+🧩 Components to Include:
+- Game Card
+- Tournament Card
+- Team Card
+- Player Card
+- Modal: Join, Create Team, Edit Team, Wallet
+- Notification Dropdown
+- Live Scoreboard Table
+- Countdown Timer
+- Match Result Table
+- Filter Sidebar
+- Leaderboard Table
+- Responsive Navbar / Sidebar (Admin + User)
+- Light Theme Toggle-ready
+
+---
+
+🛠️ Output Expectation:
+- Fully responsive web app (React + Tailwind)
+- Page-based routing (React Router)
+- All pages and modals styled with grid and flex
+- Dynamic data placeholders
+- Mobile, Tablet, Desktop breakpoints
+- Admin and user layouts split
+- Meta tags in head
+- Ready to connect APIs for all functionality
+

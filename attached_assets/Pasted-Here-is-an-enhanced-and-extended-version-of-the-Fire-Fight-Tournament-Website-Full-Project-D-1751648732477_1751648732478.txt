@@ -1,0 +1,337 @@
+Here is an **enhanced and extended version** of the **Fire Fight Tournament Website – Full Project Details `.md`** with **more pages**, **features**, and **functionalities** for both **User Side** and **Admin Panel**.
+
+---
+
+# 🔥 Fire Fight Tournament Platform
+
+> **Complete Project Documentation (Advanced Version)**
+> Includes: User Side, Admin Panel, Features, Pages, UI/UX Ideas, Functionalities, Future Enhancements, and Tech Stack
+
+---
+
+## 📌 Project Overview
+
+**Fire Fight** is a full-featured online gaming tournament platform for mobile and PC games like **Free Fire, PUBG, COD**, and other custom room-based games. The platform connects players, teams, and organizers for competitive esports experiences. It supports **cash rewards, custom rooms, team management, live results**, and more.
+
+---
+
+## 🧑‍💻 USER SIDE
+
+### 🔹 1. Home Page
+
+#### Sections:
+
+* 🔥 **Hero Banner Slider**
+* 🎮 **Game Categories Section**
+
+  * Filter by Mobile / PC / FPS / Battle Royale / MOBA
+* 🕹️ **Game Cards**:
+
+  * Game Image, Game Title, Total Players, “View Tournaments”
+* 🌟 **Featured Tournaments**
+* 🧑‍🤝‍🧑 **Top Players Carousel**
+* 🧾 **Recent Tournament Results**
+* 🕓 **Upcoming Matches Countdown**
+* 🧠 **How It Works Section**
+* 🎁 **Referral & Rewards Section**
+* 💬 **User Testimonials**
+* 📱 **Download Our App (Android/iOS)**
+* 🧭 **Footer with Navigation, Policies, and Contact Info**
+
+---
+
+### 🔹 2. Tournaments Page
+
+* 🧰 **Left Filter Toggle**
+
+  * OnClick: Slide-in Filter Panel
+  * Filter by: Game, Mode, Entry Fee, Prize, Date, Status
+* 📦 **Tournament Cards Grid View**
+
+  * Game Image, Tournament Name, Entry Fee, Prize, Spots Left
+  * Status (Live, Upcoming, Completed)
+  * Quick Join Button
+  * Tags: Solo/Duo/Squad | Room Match | Cash Prize
+
+---
+
+### 🔹 3. Tournament Details Page
+
+* 📌 Full Tournament Info
+
+  * Title, Game, Start Time, Prize Pool, Entry Fee, Description
+* 🧾 Rules & Regulations Tab
+* 👥 Participating Teams/Players Tab
+* 🗓️ Schedule & Format Tab
+* 🔴 Live Room Code / Result Section
+* ✅ **Join Tournament Modal**
+
+  * Wallet Check
+  * Select or Create Team
+  * Confirm Join
+* 🥇 Leaderboard Tab
+* 🎥 (Optional) Live Streaming Embedded Player
+
+---
+
+### 🔹 4. Teams Page
+
+* ➕ Create Team Button
+* 🔑 Join Team Button → Enter Team Code
+* 🧩 My Teams / Global Teams Tabs
+* 🧾 **Create Team Modal**:
+
+  * Logo, Name, Country (`react-world-flags`), Add Players (max 6)
+* 🧠 Player Info: Name, Initial, Email, Phone, Role, Profile Pic
+* 👥 Team Cards:
+
+  * Logo, Team Name, Flag, Join Code (Copy)
+  * Stats Grid (Wins, Matches, Rank, etc.)
+  * Players Preview (Hover Name)
+  * Add/Remove Player
+  * ⋮ Edit / Delete / View Buttons
+  * 🧠 Team View Modal (Team Details Preview)
+
+---
+
+### 🔹 5. Wallet Page
+
+* 💰 Wallet Balance (Coins + INR)
+* ➕ Add Money (Modal + Gateway)
+* 🔄 Withdraw Request
+* 💳 UPI / Paytm / Card Support
+* 📊 Transaction History
+* 🎁 Bonus History (Referral, Contest Wins)
+* 🔐 Wallet Security (PIN Setup)
+
+---
+
+### 🔹 6. Profile Page
+
+* 🧍 Avatar, Name, Email, Phone
+* 🌍 Country, Game Preferences
+* 🧠 Game Stats (Wins, Games Played, Best Team)
+* 🧾 Match History
+* 👥 My Teams Overview
+* 🔐 Security Tab: Change Password, 2FA
+* 🎯 Referral Code + Copy / Share Button
+* 🏆 Badge/Achievement Display
+
+---
+
+### 🔹 7. Match Room Page (for joined participants)
+
+* 🏷️ Room Code & Password
+* 🧑‍🤝‍🧑 All Teams List with Players
+* 🔴 Live Match Progress (Timer, Status)
+* 📊 Live Scoreboard (if synced)
+* 📝 Report Match Result (if manual)
+* 🎥 Watch Match (YouTube/Twitch embed)
+
+---
+
+### 🔹 8. Referral & Rewards Page
+
+* 📣 Invite Friends
+* 💵 Earn Coins/Cash on Signup & Tournament Join
+* 📋 Referral Rules
+* 🎯 Share Referral Link via WhatsApp, Telegram, Facebook
+* 🧾 Referral History & Bonuses
+
+---
+
+### 🔹 9. Leaderboard Page
+
+* 🥇 Global Ranking Table
+* 📅 Weekly / Monthly Filters
+* 🧑 Top Solo Players
+* 👥 Top Teams
+* 🏆 Winning History with Game Title Icons
+
+---
+
+### 🔹 10. Notifications Page
+
+* 🔔 Tournament Reminders
+* ✅ Join Confirmations
+* ⚠️ Room Code Alerts
+* 🎁 Wallet Transaction Alerts
+* 🧾 Admin Messages
+
+---
+
+### 🔹 11. Help & Support Page
+
+* ❓ FAQ
+* 📨 Submit Support Ticket
+* 🧠 Contact Support Chat
+* 🗺️ Rules & Fair Play Policy
+* 📜 Legal / Privacy / T\&C
+
+---
+
+## 🧑‍💼 ADMIN PANEL (`/admin`)
+
+### 🔹 Admin Dashboard
+
+* 📊 Summary Widgets:
+
+  * Total Players, Teams, Tournaments, Revenue
+* 📈 Chart Analytics:
+
+  * Player Growth
+  * Tournament Participation
+  * Income/Expense Graph
+* 🔔 Admin Notifications Panel
+
+---
+
+### 🔹 Tournament Management
+
+* ➕ Create Tournament Button
+
+  * Full Details: Name, Game, Type, Prize Pool, Entry Fee, Max Teams, Schedule, Room Details
+* 🧾 All Tournaments Table/List
+
+  * Actions: Edit / Delete / View / Close / Mark as Finished
+* 📁 Tournament Details Page:
+
+  * Joined Players & Teams
+  * Update Room Code / Password
+  * Upload Match Result / Leaderboard
+  * Prize Distribution Controls
+
+---
+
+### 🔹 Team Management
+
+* 🧩 View All Teams
+* 🔍 Search by Team Name / Code
+* ⚙️ Edit / Remove / View Team
+* 📋 Team Player Details
+* 📊 Stats Summary
+* 🔒 Ban Team (if suspicious)
+
+---
+
+### 🔹 User Management
+
+* 👤 All Registered Users Table
+* 📩 Email, Phone, Country, Wallet Balance
+* ⚙️ Ban / Suspend / Delete User
+* 🧾 User Activity Log
+
+---
+
+### 🔹 Wallet Management
+
+* 💰 Wallet Logs (All Transactions)
+* 💸 Withdrawal Requests
+
+  * Accept / Decline / Processed
+* 🔁 Add/Remove Admin Credit
+* ⚙️ Payment Gateway Configuration
+
+---
+
+### 🔹 Reports & Analytics
+
+* 📑 Daily / Weekly / Monthly Reports
+* 🧾 Export to PDF/CSV
+* 🎯 Tournament Performance
+* 💰 Financial Reports
+
+---
+
+### 🔹 CMS Management
+
+* 📄 Pages Editor (About, Terms, FAQ)
+* 🎨 Slider / Banner Manager
+* 📢 Announcement Manager
+* 📬 Contact Message Viewer
+
+---
+
+### 🔹 Notification Center
+
+* 📤 Send Push Notifications
+* 🎮 Target Players/Teams/Game Specific
+* 🔔 Automated Tournament Alerts
+
+---
+
+## 🧪 Upcoming Advanced Features (Future)
+
+* 🧠 **AI-Based Team Suggestions** for solo players
+* 📱 **Mobile App** (React Native or Flutter)
+* ⚡ **Real-Time Socket Results + Live Feed**
+* 📹 **Integrated Game Streaming Room**
+* 🎯 **Automated Match Result Sync (with API or Bot)**
+* 🎁 **Spin the Wheel for Bonus Coins**
+* 🎓 **Training & Strategy Rooms**
+* 💬 **Team Chat / DM / Lobby System**
+
+---
+
+## 🧰 Technologies & Stack
+
+| Area             | Stack / Tools Used                              |
+| ---------------- | ----------------------------------------------- |
+| Frontend (User)  | React.js, Tailwind CSS, Redux                   |
+| Frontend (Admin) | React.js, Material UI                           |
+| Backend          | Node.js, Express.js, Socket.IO                  |
+| Database         | MongoDB / PostgreSQL                            |
+| Auth             | JWT / Firebase Auth                             |
+| Payment Gateway  | Razorpay, Paytm, Stripe                         |
+| Deployment       | Vercel / Render / Netlify / VPS                 |
+| Mobile App       | React Native / Expo Go                          |
+| Others           | Cloudinary, react-world-flags, Chart.js, PDFKit |
+
+---
+
+## 📁 Folder Structure
+
+```
+src/
+├── assets/
+├── components/
+├── pages/
+│   ├── Home/
+│   ├── Tournaments/
+│   ├── TournamentDetails/
+│   ├── Teams/
+│   ├── Wallet/
+│   ├── Profile/
+│   ├── Leaderboard/
+│   ├── Help/
+├── admin/
+│   ├── Dashboard/
+│   ├── Users/
+│   ├── Teams/
+│   ├── Tournaments/
+│   ├── Wallet/
+│   ├── Reports/
+│   ├── CMS/
+├── utils/
+├── services/
+├── App.jsx
+└── main.jsx
+```
+
+---
+
+## 🧩 Final Deliverables
+
+* ✅ Complete Frontend (User + Admin)
+* ✅ Complete Backend with API
+* ✅ Database Schema Design
+* ✅ Auth System (Login/Signup)
+* ✅ Payment Integration
+* ✅ Real-Time Match Room System
+* ✅ Full Tournament Engine
+* ✅ Fully Responsive Design
+* ✅ Mobile App Plan (Optional)
+
+---
+
+Would you like me to generate this `.md` file for download, or break this into UI designs / components next (e.g., using React + Tailwind code)?
