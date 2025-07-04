@@ -10,16 +10,21 @@ import {
   BarChart3, 
   Bell, 
   Settings, 
-  Flame 
+  Flame,
+  FileText,
+  Activity,
+  TrendingUp
 } from "lucide-react";
 
 const navigation = [
   { name: "Dashboard", href: "/admin", icon: Home },
+  { name: "Analytics", href: "/admin/analytics", icon: TrendingUp },
   { name: "Tournaments", href: "/admin/tournaments", icon: Trophy },
   { name: "Users", href: "/admin/users", icon: Users },
   { name: "Teams", href: "/admin/teams", icon: Shield },
   { name: "Wallet", href: "/admin/wallet", icon: Wallet },
   { name: "Reports", href: "/admin/reports", icon: BarChart3 },
+  { name: "CMS", href: "/admin/cms", icon: FileText },
   { name: "Notifications", href: "/admin/notifications", icon: Bell },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];

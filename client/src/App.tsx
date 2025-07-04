@@ -26,6 +26,8 @@ import AdminWallet from "./pages/admin/AdminWallet";
 import AdminReports from "./pages/admin/AdminReports";
 import CMS from "./pages/admin/CMS";
 import AdminNotifications from "./pages/admin/AdminNotifications";
+import AdminSettings from "@/pages/admin/AdminSettings";
+import AdminAnalytics from "@/pages/admin/AdminAnalytics";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -146,6 +148,18 @@ function Router() {
       <Route path="/admin/notifications">
         <AdminLayout>
           <AdminNotifications />
+        </AdminLayout>
+      </Route>
+
+      <Route path="/admin/settings">
+        <AdminLayout>
+          <AdminSettings />
+        </AdminLayout>
+      </Route>
+
+      <Route path="/admin/analytics">
+        <AdminLayout>
+          <AdminAnalytics />
         </AdminLayout>
       </Route>
 

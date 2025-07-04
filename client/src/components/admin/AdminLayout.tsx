@@ -67,11 +67,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 <Avatar className="w-8 h-8">
                   <AvatarImage src={user.avatar} />
                   <AvatarFallback className="bg-fire-red text-white">
-                    {user.fullName.split(' ').map(n => n[0]).join('')}
+                    {user.fullName?.split(' ').map(n => n[0]).join('') || user.username?.charAt(0).toUpperCase() || 'A'}
                   </AvatarFallback>
                 </Avatar>
                 <div className="hidden sm:block">
-                  <div className="text-sm font-medium text-gray-900">{user.fullName}</div>
+                  <div className="text-sm font-medium text-gray-900">{user.fullName || user.username}</div>
                   <div className="text-xs text-gray-500">Administrator</div>
                 </div>
                 <Button variant="ghost" size="icon" onClick={logout}>
