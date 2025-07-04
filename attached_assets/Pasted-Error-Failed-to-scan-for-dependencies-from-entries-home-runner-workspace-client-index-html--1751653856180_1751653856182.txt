@@ -1,0 +1,125 @@
+Error:   Failed to scan for dependencies from entries:
+  /home/runner/workspace/client/index.html
+
+  ✘ [ERROR] Detected cycle while resolving import "AuthProvider"
+
+    client/src/App.tsx:6:9:
+      6 │ import { AuthProvider } from "./lib/auth";
+        ╵          ~~~~~~~~~~~~
+
+
+✘ [ERROR] Detected cycle while resolving import "useAuth"
+
+    client/src/components/AdminLayout.tsx:10:9:
+      10 │ import { useAuth } from "@/lib/auth";
+         ╵          ~~~~~~~
+
+
+✘ [ERROR] Detected cycle while resolving import "useAuth"
+
+    client/src/components/Layout.tsx:8:9:
+      8 │ import { useAuth } from "@/lib/auth";
+        ╵          ~~~~~~~
+
+
+✘ [ERROR] Detected cycle while resolving import "useAuth"
+
+    client/src/components/modals/AddMoneyModal.tsx:8:9:
+      8 │ import { useAuth } from "@/lib/auth";
+        ╵          ~~~~~~~
+
+
+✘ [ERROR] Detected cycle while resolving import "useAuth"
+
+    client/src/components/modals/CreateTeamModal.tsx:12:9:
+      12 │ import { useAuth } from "@/lib/auth";
+         ╵          ~~~~~~~
+
+
+✘ [ERROR] Detected cycle while resolving import "useAuth"
+
+    client/src/components/modals/JoinTournamentModal.tsx:8:9:
+      8 │ import { useAuth } from "@/lib/auth";
+        ╵          ~~~~~~~
+
+
+✘ [ERROR] Detected cycle while resolving import "AuthProvider"
+
+    client/src/lib/auth.ts:2:9:
+      2 │ export { AuthProvider, useAuth } from './auth';
+        ╵          ~~~~~~~~~~~~
+
+
+✘ [ERROR] Detected cycle while resolving import "useAuth"
+
+    client/src/lib/auth.ts:2:23:
+      2 │ export { AuthProvider, useAuth } from './auth';
+        ╵                        ~~~~~~~
+
+
+✘ [ERROR] Detected cycle while resolving import "useAuth"
+
+    client/src/pages/Home.tsx:13:9:
+      13 │ import { useAuth } from "@/lib/auth";
+         ╵          ~~~~~~~
+
+
+✘ [ERROR] Detected cycle while resolving import "useAuth"
+
+    client/src/pages/Profile.tsx:14:9:
+      14 │ import { useAuth } from "@/lib/auth";
+         ╵          ~~~~~~~
+
+
+✘ [ERROR] Detected cycle while resolving import "useAuth"
+
+    client/src/pages/Referral.tsx:8:9:
+      8 │ import { useAuth } from "@/lib/auth";
+        ╵          ~~~~~~~
+
+
+✘ [ERROR] Detected cycle while resolving import "useAuth"
+
+    client/src/pages/Teams.tsx:10:9:
+      10 │ import { useAuth } from "@/lib/auth";
+         ╵          ~~~~~~~
+
+
+✘ [ERROR] Detected cycle while resolving import "useAuth"
+
+    client/src/pages/Wallet.tsx:19:9:
+      19 │ import { useAuth } from "@/lib/auth";
+         ╵          ~~~~~~~
+
+
+✘ [ERROR] Detected cycle while resolving import "useAuth"
+
+    client/src/pages/admin/TeamManagement.tsx:3:9:
+      3 │ import { useAuth } from "@/lib/auth";
+        ╵          ~~~~~~~
+
+
+✘ [ERROR] Detected cycle while resolving import "useAuth"
+
+    client/src/pages/admin/TournamentManagement.tsx:3:9:
+      3 │ import { useAuth } from "@/lib/auth";
+        ╵          ~~~~~~~
+
+
+✘ [ERROR] Detected cycle while resolving import "useAuth"
+
+    client/src/pages/admin/UserManagement.tsx:3:9:
+      3 │ import { useAuth } from "@/lib/auth";
+        ╵          ~~~~~~~
+
+
+    at failureErrorWithLog (/home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:945:25
+    at runOnEndCallbacks (/home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:1315:45)
+    at buildResponseToResult (/home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:955:9
+    at new Promise (<anonymous>)
+    at requestCallbacks.on-end (/home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:954:54)
+    at handleRequest (/home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:647:17)
+    at handleIncomingPacket (/home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:672:7)
+    at Socket.readFromStdout (/home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:600:7)

@@ -1,32 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Copy, 
-  Gift, 
-  Users, 
-  Share, 
-  Facebook, 
-  Twitter, 
-  MessageCircle,
-  Send,
-  TrendingUp,
-  Star
-} from "lucide-react";
-import { formatCurrency, formatDate } from "@/lib/utils";
-import { useAuth } from "@/hooks/useAuth";
-import { toast } from "@/hooks/use-toast";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Copy, Share2, Gift, Users, TrendingUp, Facebook, MessageCircle } from "lucide-react";
+import { useAuth } from "@/lib/auth";
+import { useToast } from "@/hooks/use-toast";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Referral() {
   const { user } = useAuth();
+  const { toast } = useToast();
+  const [shareMethod, setShareMethod] = useState("");
 
-  // Fetch user referrals
-  const { data: referrals = [], isLoading: referralsLoading } = useQuery({
-    queryKey: ["/api/users", user?.id, "referrals"],
-    enabled: !!user?.id,
-  });
+  const referralLink = `https://firefight.gg/register?ref=${user?.referralCode}`;
 
   const copyReferralCode = () => {
     if (user?.referralCode) {
@@ -38,265 +26,240 @@ export default function Referral() {
     }
   };
 
-  const shareOnWhatsApp = () => {
-    const message = `Join Fire Fight gaming tournaments using my referral code ${user?.referralCode} and get ₹50 bonus! 🎮🔥`;
-    const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+  const copyReferralLink = () => {
+    navigator.clipboard.writeText(referralLink);
+    toast({
+      title: "Copied!",
+      description: "Referral link copied to clipboard",
+    });
   };
 
-  const shareOnFacebook = () => {
-    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin)}&quote=${encodeURIComponent(`Join Fire Fight gaming tournaments using my referral code ${user?.referralCode}!`)}`;
-    window.open(url, '_blank');
+  const shareViaWhatsApp = () => {
+    const message = `Join Fire Fight gaming tournament platform and earn real money! Use my referral code: ${user?.referralCode}. Sign up here: ${referralLink}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
   };
 
-  const shareOnTwitter = () => {
-    const message = `Join Fire Fight gaming tournaments using my referral code ${user?.referralCode} and get ₹50 bonus! 🎮🔥 #FireFight #Gaming`;
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+  const shareViaFacebook = () => {
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}`;
+    window.open(url, '_blank', 'width=600,height=400');
   };
 
-  if (!user) {
-    return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <h1 className="text-3xl font-bold mb-4">Referral Program</h1>
-        <p className="text-gray-600">Please login to access the referral program.</p>
-      </div>
-    );
-  }
-
-  const totalEarnings = referrals.reduce((sum: number, ref: any) => sum + (ref.bonusAmount || 0), 0);
-  const successfulReferrals = referrals.filter((ref: any) => ref.isRewarded).length;
+  const shareMethods = [
+    {
+      id: "whatsapp",
+      name: "WhatsApp",
+      icon: MessageCircle,
+      color: "bg-green-500",
+      action: shareViaWhatsApp,
+    },
+    {
+      id: "facebook", 
+      name: "Facebook",
+      icon: Facebook,
+      color: "bg-blue-500",
+      action: shareViaFacebook,
+    },
+    {
+      id: "copy",
+      name: "Copy Link",
+      icon: Copy,
+      color: "bg-gray-500",
+      action: copyReferralLink,
+    },
+  ];
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Referral & Rewards</h1>
-      
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold mb-2">Referral & Rewards</h1>
+        <p className="text-gray-600">Invite friends and earn money together!</p>
+      </div>
+
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-fire-red to-fire-yellow rounded-3xl p-8 md:p-12 text-white mb-8">
-        <div className="text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Invite Friends & Earn ₹50 Each!
-          </h2>
-          <p className="text-xl mb-8 text-white/90">
-            Share your referral code and earn money when your friends join Fire Fight
-          </p>
-          
-          {/* Referral Code Display */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-6 max-w-md mx-auto">
-            <h3 className="text-lg font-semibold mb-4">Your Referral Code</h3>
-            <div className="flex items-center space-x-4">
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg px-6 py-3 text-2xl font-mono font-bold">
-                {user.referralCode}
-              </div>
-              <Button
-                onClick={copyReferralCode}
-                className="bg-white text-fire-red hover:bg-gray-100"
-              >
-                <Copy className="w-4 h-4 mr-2" />
-                Copy
-              </Button>
+      <div className="bg-gradient-to-r from-red-500 to-yellow-500 rounded-3xl p-8 md:p-12 text-center text-white mb-8">
+        <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          Earn ₹50 for Every Friend!
+        </h2>
+        <p className="text-xl mb-8 text-white/90">
+          Your friends get ₹25 bonus when they sign up with your code
+        </p>
+        
+        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 max-w-2xl mx-auto">
+          <h3 className="text-lg font-semibold mb-4">Your Referral Code</h3>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="bg-white/30 backdrop-blur-sm rounded-lg px-6 py-3 text-2xl font-mono font-bold">
+              {user?.referralCode || "LOADING..."}
             </div>
-          </div>
-          
-          {/* Share Buttons */}
-          <div className="flex flex-wrap justify-center gap-4">
             <Button
-              onClick={shareOnWhatsApp}
-              className="bg-green-500 hover:bg-green-600 text-white"
+              className="bg-white text-red-500 hover:bg-gray-100"
+              onClick={copyReferralCode}
             >
-              <MessageCircle className="w-4 h-4 mr-2" />
-              WhatsApp
-            </Button>
-            <Button
-              onClick={shareOnFacebook}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              <Facebook className="w-4 h-4 mr-2" />
-              Facebook
-            </Button>
-            <Button
-              onClick={shareOnTwitter}
-              className="bg-blue-400 hover:bg-blue-500 text-white"
-            >
-              <Twitter className="w-4 h-4 mr-2" />
-              Twitter
-            </Button>
-            <Button
-              className="bg-white/20 hover:bg-white/30 text-white border-white/20"
-              variant="outline"
-            >
-              <Send className="w-4 h-4 mr-2" />
-              More
+              <Copy className="w-4 h-4 mr-2" />
+              Copy Code
             </Button>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Stats Cards */}
-        <div className="lg:col-span-1 space-y-6">
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-fire-red/10 rounded-full flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-fire-red" />
+        {/* Stats Overview */}
+        <div className="lg:col-span-1">
+          <div className="grid grid-cols-1 gap-6">
+            <Card>
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  <Users className="w-6 h-6 text-green-600" />
                 </div>
-                <div>
-                  <h3 className="text-2xl font-bold fire-red">{formatCurrency(totalEarnings)}</h3>
-                  <p className="text-gray-600">Total Earnings</p>
+                <div className="text-3xl font-bold text-green-600">0</div>
+                <div className="text-sm text-gray-600">Friends Referred</div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                  <TrendingUp className="w-6 h-6 text-blue-600" />
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-fire-blue/10 rounded-full flex items-center justify-center">
-                  <Users className="w-6 h-6 text-fire-blue" />
+                <div className="text-3xl font-bold text-blue-600">₹0</div>
+                <div className="text-sm text-gray-600">Total Earnings</div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 mx-auto bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                  <Gift className="w-6 h-6 text-yellow-600" />
                 </div>
-                <div>
-                  <h3 className="text-2xl font-bold fire-blue">{successfulReferrals}</h3>
-                  <p className="text-gray-600">Successful Referrals</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-fire-yellow/10 rounded-full flex items-center justify-center">
-                  <Star className="w-6 h-6 text-fire-yellow" />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold fire-yellow">{referrals.length}</h3>
-                  <p className="text-gray-600">Total Invites</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                <div className="text-3xl font-bold text-yellow-600">₹50</div>
+                <div className="text-sm text-gray-600">Per Referral</div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-        
+
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
+          {/* Share Methods */}
+          <Card>
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold mb-6">Share with Friends</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                {shareMethods.map((method) => {
+                  const Icon = method.icon;
+                  return (
+                    <Button
+                      key={method.id}
+                      variant="outline"
+                      className="h-auto p-4 flex-col space-y-2 hover:scale-105 transition-transform"
+                      onClick={method.action}
+                    >
+                      <div className={`w-12 h-12 ${method.color} rounded-full flex items-center justify-center`}>
+                        <Icon className="w-6 h-6 text-white" />
+                      </div>
+                      <span className="font-semibold">{method.name}</span>
+                    </Button>
+                  );
+                })}
+              </div>
+
+              <div className="bg-gray-50 rounded-lg p-4">
+                <label className="block text-sm font-medium mb-2">Referral Link</label>
+                <div className="flex space-x-2">
+                  <Input
+                    value={referralLink}
+                    readOnly
+                    className="bg-white"
+                  />
+                  <Button onClick={copyReferralLink}>
+                    <Copy className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* How It Works */}
           <Card>
-            <CardHeader>
-              <CardTitle>How It Works</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold mb-6">How It Works</h3>
+              
+              <div className="space-y-4">
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-fire-red rounded-full flex items-center justify-center text-white font-bold">1</div>
+                  <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                    1
+                  </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Share Your Code</h3>
-                    <p className="text-gray-600">Share your unique referral code with friends via WhatsApp, social media, or any platform.</p>
+                    <h4 className="font-semibold">Share your code</h4>
+                    <p className="text-gray-600">Send your referral code or link to friends</p>
                   </div>
                 </div>
+
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-fire-yellow rounded-full flex items-center justify-center text-white font-bold">2</div>
+                  <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                    2
+                  </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Friend Signs Up</h3>
-                    <p className="text-gray-600">Your friend registers on Fire Fight using your referral code during signup.</p>
+                    <h4 className="font-semibold">Friend signs up</h4>
+                    <p className="text-gray-600">They create an account using your referral code</p>
                   </div>
                 </div>
+
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-fire-blue rounded-full flex items-center justify-center text-white font-bold">3</div>
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                    3
+                  </div>
                   <div>
-                    <h3 className="font-semibold mb-1">They Play Their First Tournament</h3>
-                    <p className="text-gray-600">Once your friend joins and plays their first tournament, the referral is activated.</p>
+                    <h4 className="font-semibold">Friend plays first tournament</h4>
+                    <p className="text-gray-600">They join and play their first tournament</p>
                   </div>
                 </div>
+
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">4</div>
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                    4
+                  </div>
                   <div>
-                    <h3 className="font-semibold mb-1">You Both Earn ₹50</h3>
-                    <p className="text-gray-600">Both you and your friend receive ₹50 bonus in your wallets automatically!</p>
+                    <h4 className="font-semibold">You both earn!</h4>
+                    <p className="text-gray-600">You get ₹50, your friend gets ₹25 bonus</p>
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           {/* Referral History */}
           <Card>
-            <CardHeader>
-              <CardTitle>Referral History</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {referralsLoading ? (
-                <div className="space-y-4">
-                  {[...Array(3)].map((_, i) => (
-                    <div key={i} className="flex items-center p-4 animate-pulse">
-                      <div className="w-10 h-10 bg-gray-200 rounded-full mr-3"></div>
-                      <div className="flex-1">
-                        <div className="w-32 h-4 bg-gray-200 rounded mb-2"></div>
-                        <div className="w-24 h-3 bg-gray-200 rounded"></div>
-                      </div>
-                      <div className="w-16 h-4 bg-gray-200 rounded"></div>
-                    </div>
-                  ))}
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold mb-6">Referral History</h3>
+              
+              <div className="text-center py-8">
+                <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                  <Users className="w-8 h-8 text-gray-400" />
                 </div>
-              ) : referrals.length === 0 ? (
-                <div className="text-center py-8">
-                  <Gift className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No referrals yet</h3>
-                  <p className="text-gray-600 mb-4">Start sharing your referral code to earn rewards!</p>
-                  <Button onClick={copyReferralCode} className="bg-fire-red hover:bg-fire-red/90">
-                    <Copy className="w-4 h-4 mr-2" />
-                    Copy Referral Code
-                  </Button>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {referrals.map((referral: any) => (
-                    <div key={referral.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <Avatar className="w-10 h-10">
-                          <AvatarFallback className="bg-fire-red text-white">
-                            R{referral.id}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <h4 className="font-semibold">Referral #{referral.id}</h4>
-                          <p className="text-sm text-gray-600">
-                            {formatDate(referral.createdAt)}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className={`font-semibold ${referral.isRewarded ? 'text-green-600' : 'text-orange-600'}`}>
-                          {referral.isRewarded ? '+' : ''}₹{referral.bonusAmount}
-                        </div>
-                        <Badge 
-                          variant="outline" 
-                          className={referral.isRewarded ? 'border-green-600 text-green-600' : 'border-orange-600 text-orange-600'}
-                        >
-                          {referral.isRewarded ? 'Rewarded' : 'Pending'}
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                <h4 className="text-lg font-semibold text-gray-900 mb-2">No Referrals Yet</h4>
+                <p className="text-gray-500 mb-6">Start inviting friends to see your referral history here.</p>
+                <Button
+                  className="bg-red-500 hover:bg-red-600"
+                  onClick={shareViaWhatsApp}
+                >
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Share Now
+                </Button>
+              </div>
             </CardContent>
           </Card>
-          
-          {/* Terms & Conditions */}
+
+          {/* Terms */}
           <Card>
-            <CardHeader>
-              <CardTitle>Terms & Conditions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-sm space-y-2 text-gray-600">
-                <p>• Referral bonus is credited only when the referred user plays their first tournament</p>
-                <p>• Both referrer and referee receive ₹50 bonus each</p>
-                <p>• Referral rewards are processed within 24 hours of qualification</p>
-                <p>• Self-referrals and fake accounts are strictly prohibited</p>
-                <p>• Fire Fight reserves the right to modify referral terms at any time</p>
-                <p>• Suspicious activities may result in referral bonus forfeiture</p>
-                <p>• Only new users are eligible for referral program</p>
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold mb-4">Terms & Conditions</h3>
+              <div className="space-y-2 text-sm text-gray-600">
+                <p>• Referral bonus is credited only when referred friend completes their first tournament</p>
+                <p>• Maximum 50 referrals per user per month</p>
+                <p>• Self-referrals or fake accounts will result in account suspension</p>
+                <p>• Referral earnings can be withdrawn to bank account</p>
+                <p>• Fire Fight reserves the right to modify referral program terms</p>
               </div>
             </CardContent>
           </Card>
