@@ -22,10 +22,10 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import TournamentManagement from "./pages/admin/TournamentManagement";
 import UserManagement from "./pages/admin/UserManagement";
 import TeamManagement from "./pages/admin/TeamManagement";
-import WalletManagement from "./pages/admin/WalletManagement";
-import Reports from "./pages/admin/Reports";
+import AdminWallet from "./pages/admin/AdminWallet";
+import AdminReports from "./pages/admin/AdminReports";
 import CMS from "./pages/admin/CMS";
-import NotificationCenter from "./pages/admin/NotificationCenter";
+import AdminNotifications from "./pages/admin/AdminNotifications";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -34,20 +34,20 @@ function Router() {
       {/* Public routes */}
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
-      
+
       {/* User routes */}
       <Route path="/">
         <Layout>
           <Home />
         </Layout>
       </Route>
-      
+
       <Route path="/tournaments">
         <Layout>
           <Tournaments />
         </Layout>
       </Route>
-      
+
       <Route path="/tournaments/:id">
         {(params) => (
           <Layout>
@@ -55,31 +55,31 @@ function Router() {
           </Layout>
         )}
       </Route>
-      
+
       <Route path="/teams">
         <Layout>
           <Teams />
         </Layout>
       </Route>
-      
+
       <Route path="/wallet">
         <Layout>
           <Wallet />
         </Layout>
       </Route>
-      
+
       <Route path="/profile">
         <Layout>
           <Profile />
         </Layout>
       </Route>
-      
+
       <Route path="/leaderboard">
         <Layout>
           <Leaderboard />
         </Layout>
       </Route>
-      
+
       <Route path="/match-room/:id">
         {(params) => (
           <Layout>
@@ -87,68 +87,68 @@ function Router() {
           </Layout>
         )}
       </Route>
-      
+
       <Route path="/referral">
         <Layout>
           <Referral />
         </Layout>
       </Route>
-      
+
       <Route path="/help">
         <Layout>
           <Help />
         </Layout>
       </Route>
-      
+
       {/* Admin routes */}
       <Route path="/admin">
         <AdminLayout>
           <AdminDashboard />
         </AdminLayout>
       </Route>
-      
+
       <Route path="/admin/tournaments">
         <AdminLayout>
           <TournamentManagement />
         </AdminLayout>
       </Route>
-      
+
       <Route path="/admin/users">
         <AdminLayout>
           <UserManagement />
         </AdminLayout>
       </Route>
-      
+
       <Route path="/admin/teams">
         <AdminLayout>
           <TeamManagement />
         </AdminLayout>
       </Route>
-      
+
       <Route path="/admin/wallet">
         <AdminLayout>
-          <WalletManagement />
+          <AdminWallet />
         </AdminLayout>
       </Route>
-      
+
       <Route path="/admin/reports">
         <AdminLayout>
-          <Reports />
+          <AdminReports />
         </AdminLayout>
       </Route>
-      
+
       <Route path="/admin/cms">
         <AdminLayout>
           <CMS />
         </AdminLayout>
       </Route>
-      
+
       <Route path="/admin/notifications">
         <AdminLayout>
-          <NotificationCenter />
+          <AdminNotifications />
         </AdminLayout>
       </Route>
-      
+
       <Route component={NotFound} />
     </Switch>
   );
