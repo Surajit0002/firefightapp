@@ -63,7 +63,7 @@ export default function Wallet() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Wallet</h1>
-      
+
       {/* Wallet Balance Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <Card className="bg-gradient-to-r from-red-500 to-yellow-500 text-white">
@@ -96,7 +96,7 @@ export default function Wallet() {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
           <CardContent className="p-6">
             <div className="flex justify-between items-start mb-4">
@@ -114,7 +114,7 @@ export default function Wallet() {
           </CardContent>
         </Card>
       </div>
-      
+
       {/* Quick Actions */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
@@ -128,7 +128,7 @@ export default function Wallet() {
             <h3 className="font-semibold">Add Money</h3>
           </CardContent>
         </Card>
-        
+
         <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
           <CardContent className="p-6 text-center">
             <div className="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-3">
@@ -137,7 +137,7 @@ export default function Wallet() {
             <h3 className="font-semibold">Withdraw</h3>
           </CardContent>
         </Card>
-        
+
         <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
           <CardContent className="p-6 text-center">
             <div className="w-12 h-12 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-3">
@@ -146,7 +146,7 @@ export default function Wallet() {
             <h3 className="font-semibold">History</h3>
           </CardContent>
         </Card>
-        
+
         <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
           <CardContent className="p-6 text-center">
             <div className="w-12 h-12 mx-auto bg-yellow-100 rounded-full flex items-center justify-center mb-3">
@@ -156,12 +156,12 @@ export default function Wallet() {
           </CardContent>
         </Card>
       </div>
-      
+
       {/* Transaction History */}
       <Card>
         <CardContent className="p-6">
           <h3 className="text-xl font-semibold mb-6">Recent Transactions</h3>
-          
+
           {transactions && transactions.length > 0 ? (
             <Table>
               <TableHeader>
@@ -179,7 +179,7 @@ export default function Wallet() {
                     <TableCell>
                       <div className="flex items-center space-x-2">
                         {getTransactionIcon(transaction.type)}
-                        <span className="capitalize">{transaction.type.replace('_', ' ')}</span>
+                        <span className="capitalize">{transaction.type?.replace('_', ' ') || 'unknown'}</span>
                       </div>
                     </TableCell>
                     <TableCell>{transaction.description}</TableCell>

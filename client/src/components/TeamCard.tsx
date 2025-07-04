@@ -29,7 +29,7 @@ export default function TeamCard({ team, onEdit, onView, onAddMember }: TeamCard
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-yellow-500 rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-lg">
-                {team.name.charAt(0)}
+                {team.name?.charAt(0) || 'T'}
               </span>
             </div>
             <div>
