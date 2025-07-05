@@ -80,7 +80,7 @@ function AddPlayerModal({ open, onOpenChange, onAddPlayer }: AddPlayerModalProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full max-w-4xl mx-4 max-h-[95vh] overflow-y-auto bg-gradient-to-br from-white to-gray-50">
+      <DialogContent className="w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto bg-gradient-to-br from-white to-gray-50">
         <DialogHeader className="pb-6">
           <DialogTitle className="text-3xl font-bold text-center bg-gradient-to-r from-red-600 to-purple-600 bg-clip-text text-transparent">
             Add New Player
@@ -88,9 +88,9 @@ function AddPlayerModal({ open, onOpenChange, onAddPlayer }: AddPlayerModalProps
           <p className="text-gray-600 text-center mt-2">Fill in the player details to add them to your team</p>
         </DialogHeader>
         
-        <div className="space-y-8">
+        <div className="space-y-6">
           {/* Profile Picture Section - Full Width */}
-          <div className="text-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-200">
+          <div className="text-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-4 border border-blue-200">
             <Label className="text-lg font-semibold mb-4 block text-gray-800">Profile Picture</Label>
             <div className="relative inline-block group">
               <div className="w-28 h-28 bg-gradient-to-br from-red-500 via-purple-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg transform transition-transform group-hover:scale-105">
@@ -110,9 +110,9 @@ function AddPlayerModal({ open, onOpenChange, onAddPlayer }: AddPlayerModalProps
           </div>
 
           {/* Form Fields - 2 Column Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Left Column */}
-            <div className="space-y-6">
+            <div className="space-y-4">
               {/* Player Name */}
               <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
                 <Label htmlFor="playerName" className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
@@ -162,7 +162,7 @@ function AddPlayerModal({ open, onOpenChange, onAddPlayer }: AddPlayerModalProps
             </div>
 
             {/* Right Column */}
-            <div className="space-y-6">
+            <div className="space-y-4">
               {/* Player Role */}
               <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
                 <Label htmlFor="playerRole" className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
@@ -190,48 +190,27 @@ function AddPlayerModal({ open, onOpenChange, onAddPlayer }: AddPlayerModalProps
                 </Select>
               </div>
 
-              {/* Game Selection */}
-              <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                <Label htmlFor="gameId" className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
-                  Primary Game
-                </Label>
-                <Select value={playerData.gameId} onValueChange={(value) => handleInputChange("gameId", value)}>
-                  <SelectTrigger className="mt-2 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg">
-                    <SelectValue placeholder="Select game" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {games.map((game) => (
-                      <SelectItem key={game.value} value={game.value} className="hover:bg-blue-50">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-3 h-3 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
-                          <span>{game.label}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              
 
-              {/* Player Stats/Info */}
-              <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-4 border border-blue-200">
-                <Label className="text-sm font-semibold text-gray-700 mb-3 block">Player Stats</Label>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center p-3 bg-white rounded-lg border">
-                    <div className="text-2xl font-bold text-blue-600">0</div>
-                    <div className="text-xs text-gray-500">Matches</div>
-                  </div>
-                  <div className="text-center p-3 bg-white rounded-lg border">
-                    <div className="text-2xl font-bold text-green-600">0</div>
-                    <div className="text-xs text-gray-500">Wins</div>
-                  </div>
-                </div>
+              {/* Game ID */}
+              <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                <Label htmlFor="gameUserId" className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                  <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                  Game ID
+                </Label>
+                <Input
+                  id="gameUserId"
+                  value={playerData.gameId}
+                  onChange={(e) => handleInputChange("gameId", e.target.value)}
+                  placeholder="Enter game user ID"
+                  className="mt-2 border-gray-300 focus:border-purple-500 focus:ring-purple-500 rounded-lg"
+                />
               </div>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex space-x-4 pt-6 border-t border-gray-200">
+          <div className="flex space-x-4 pt-4 border-t border-gray-200">
             <Button
               variant="outline"
               className="flex-1 py-3 text-lg font-semibold border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 rounded-xl transition-all duration-200"
