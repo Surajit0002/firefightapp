@@ -216,87 +216,88 @@ export default function CreateTeamModal({ open, onOpenChange }: CreateTeamModalP
               </div>
             </div>
 
-            {/* Team Info Display */}
+            {/* Team Info Display - Smaller Box */}
             {form.watch("name") && selectedCountry && (
-              <div className="bg-gray-50 rounded-lg p-4 text-center">
-                <div className="flex items-center justify-center space-x-3 mb-2">
-                  <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-lg">
+              <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-3 border border-gray-200">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">
                       {form.watch("name").charAt(0).toUpperCase()}
                     </span>
                   </div>
-                  <div>
-                    <h3 className="text-xl font-bold">{form.watch("name")}</h3>
-                    <div className="flex items-center justify-center space-x-2">
-                      <span className="text-lg">{selectedCountry.flag}</span>
-                      <span className="text-sm text-gray-600">{selectedCountry.name}</span>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-gray-800">{form.watch("name")}</h3>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm">{selectedCountry.flag}</span>
+                      <span className="text-xs text-gray-600">{selectedCountry.name}</span>
                     </div>
                   </div>
+                  <Button
+                    type="button"
+                    size="sm"
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 text-xs"
+                    onClick={() => setAddPlayerModalOpen(true)}
+                    disabled={additionalPlayers.length >= 5}
+                  >
+                    <Plus className="w-3 h-3 mr-1" />
+                    Add Player
+                  </Button>
                 </div>
               </div>
             )}
             
-            {/* Team Members */}
+            {/* Team Members Grid */}
             <div>
-              <Label className="text-lg font-medium mb-4 block">Team Members (Max 6)</Label>
-              <div className="space-y-3">
+              <Label className="text-lg font-medium mb-4 block">Team Members ({1 + additionalPlayers.length}/6)</Label>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {/* Captain */}
-                <div className="border border-gray-300 rounded-lg p-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-sm font-semibold">
-                        {user?.username.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                    <div>
-                      <div className="font-semibold">{user?.username} (You)</div>
-                      <div className="text-sm text-gray-600">Captain</div>
-                    </div>
+                <div className="bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-lg p-4 text-center relative">
+                  <div className="absolute top-2 right-2">
+                    <Badge className="bg-red-500 text-white text-xs px-2 py-1">Captain</Badge>
                   </div>
+                  <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span className="text-white text-lg font-bold">
+                      {user?.username.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="font-semibold text-gray-800">{user?.username}</div>
+                  <div className="text-xs text-gray-600">(You)</div>
                 </div>
 
                 {/* Additional Players */}
                 {additionalPlayers.map((player, index) => (
-                  <div key={index} className="border border-gray-300 rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                          <span className="text-white text-sm font-semibold">
-                            {player.charAt(0).toUpperCase()}
-                          </span>
-                        </div>
-                        <div>
-                          <div className="font-semibold">{player}</div>
-                          <div className="text-sm text-gray-600">Member</div>
-                        </div>
-                      </div>
+                  <div key={index} className="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-lg p-4 text-center relative">
+                    <div className="absolute top-2 right-2">
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => handleRemovePlayer(index)}
-                        className="text-red-500 hover:text-red-700"
+                        className="text-red-500 hover:text-red-700 p-1 h-auto"
                       >
-                        <X className="w-4 h-4" />
+                        <X className="w-3 h-3" />
                       </Button>
                     </div>
+                    <Badge className="bg-blue-500 text-white text-xs px-2 py-1 mb-2">Member</Badge>
+                    <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <span className="text-white text-lg font-bold">
+                        {player.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="font-semibold text-gray-800">{player}</div>
+                    <div className="text-xs text-gray-600">Player</div>
                   </div>
                 ))}
                 
-                {/* Add Player Button */}
-                {additionalPlayers.length < 5 && (
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      className="w-full text-gray-400 hover:text-gray-600 flex items-center justify-center space-x-2"
-                      onClick={() => setAddPlayerModalOpen(true)}
-                    >
-                      <Plus className="w-5 h-5" />
-                      <span>Add Player</span>
-                    </Button>
+                {/* Empty Slots */}
+                {Array.from({ length: Math.max(0, 5 - additionalPlayers.length) }).map((_, index) => (
+                  <div key={`empty-${index}`} className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center flex flex-col items-center justify-center min-h-[120px] bg-gray-50">
+                    <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-3">
+                      <Plus className="w-6 h-6 text-gray-400" />
+                    </div>
+                    <div className="text-xs text-gray-500">Empty Slot</div>
                   </div>
-                )}
+                ))}
               </div>
             </div>
             
