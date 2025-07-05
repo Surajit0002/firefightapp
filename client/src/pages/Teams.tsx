@@ -11,6 +11,7 @@ import { useAuth } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import Flag from "react-world-flags";
 
 export default function Teams() {
   const { user } = useAuth();

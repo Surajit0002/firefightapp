@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Copy, Edit, MoreVertical, Plus, Users } from "lucide-react";
 import { Team } from "@shared/schema";
 import { countries } from "@/lib/countries";
+import Flag from "react-world-flags";
 
 interface TeamCardProps {
   team: Team;
@@ -35,8 +36,12 @@ export default function TeamCard({ team, onEdit, onView, onAddMember }: TeamCard
             <div>
               <h3 className="text-xl font-bold">{team.name}</h3>
               <div className="flex items-center space-x-2">
-                <span className="text-2xl">{country?.flag}</span>
-                <span className="text-sm text-gray-600">{country?.name}</span>
+                {team.country && (
+                  <>
+                    <Flag code={team.country} className="w-6 h-4 rounded-sm" />
+                    <span className="text-sm text-gray-600">{country?.name}</span>
+                  </>
+                )}
               </div>
             </div>
           </div>

@@ -9,6 +9,7 @@ import PlayerCard from "@/components/PlayerCard";
 import { User, Team } from "@shared/schema";
 import { Trophy, Medal, Award, Filter } from "lucide-react";
 import { countries } from "@/lib/countries";
+import Flag from "react-world-flags";
 
 export default function Leaderboard() {
   const [filter, setFilter] = useState("global");
@@ -183,10 +184,10 @@ export default function Leaderboard() {
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-2">
-                            {country && (
+                            {user.country && (
                               <>
-                                <span>{country.flag}</span>
-                                <span className="text-sm">{country.name}</span>
+                                <Flag code={user.country} className="w-6 h-4 rounded-sm" />
+                                <span className="text-sm">{country?.name}</span>
                               </>
                             )}
                           </div>
@@ -248,10 +249,10 @@ export default function Leaderboard() {
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center space-x-2">
-                          {country && (
+                          {team.country && (
                             <>
-                              <span>{country.flag}</span>
-                              <span className="text-sm">{country.name}</span>
+                              <Flag code={team.country} className="w-6 h-4 rounded-sm" />
+                              <span className="text-sm">{country?.name}</span>
                             </>
                           )}
                         </div>
