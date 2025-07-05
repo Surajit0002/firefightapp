@@ -1,5 +1,6 @@
 import { pgTable, text, serial, integer, boolean, timestamp, decimal } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
+import { relations } from "drizzle-orm";
 import { z } from "zod";
 
 export const users = pgTable("users", {
@@ -161,6 +162,95 @@ export const insertNotificationSchema = createInsertSchema(notifications).omit({
 export const insertTournamentResultSchema = createInsertSchema(tournamentResults).omit({
   id: true,
 });
+
+// Types
+// Relations
+export const usersRelations = relations(users, ({ many, one }) => ({
+  teams: many(teamMembers),
+  tournaments: many(tournamentParticipants),
+  transactions: many(transactions),
+  notifications: many(notifications),
+  results: many(tournamentResults),
+  captainOf: many(teams),
+}));
+
+export const gamesRelations = relations(games, ({ many }) => ({
+  tournaments: many(tournaments),
+}));
+
+export const tournamentsRelations = relations(tournaments, ({ one, many }) => ({
+  game: one(games, {
+    fields: [tournaments.gameId],
+    references: [games.id],
+  }),
+  participants: many(tournamentParticipants),
+  results: many(tournamentResults),
+}));
+
+export const teamsRelations = relations(teams, ({ one, many }) => ({
+  captain: one(users, {
+    fields: [teams.captainId],
+    references: [users.id],
+  }),
+  members: many(teamMembers),
+  tournaments: many(tournamentParticipants),
+  results: many(tournamentResults),
+}));
+
+export const teamMembersRelations = relations(teamMembers, ({ one }) => ({
+  team: one(teams, {
+    fields: [teamMembers.teamId],
+    references: [teams.id],
+  }),
+  user: one(users, {
+    fields: [teamMembers.userId],
+    references: [users.id],
+  }),
+}));
+
+export const tournamentParticipantsRelations = relations(tournamentParticipants, ({ one }) => ({
+  tournament: one(tournaments, {
+    fields: [tournamentParticipants.tournamentId],
+    references: [tournaments.id],
+  }),
+  user: one(users, {
+    fields: [tournamentParticipants.userId],
+    references: [users.id],
+  }),
+  team: one(teams, {
+    fields: [tournamentParticipants.teamId],
+    references: [teams.id],
+  }),
+}));
+
+export const transactionsRelations = relations(transactions, ({ one }) => ({
+  user: one(users, {
+    fields: [transactions.userId],
+    references: [users.id],
+  }),
+}));
+
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+  user: one(users, {
+    fields: [notifications.userId],
+    references: [users.id],
+  }),
+}));
+
+export const tournamentResultsRelations = relations(tournamentResults, ({ one }) => ({
+  tournament: one(tournaments, {
+    fields: [tournamentResults.tournamentId],
+    references: [tournaments.id],
+  }),
+  user: one(users, {
+    fields: [tournamentResults.userId],
+    references: [users.id],
+  }),
+  team: one(teams, {
+    fields: [tournamentResults.teamId],
+    references: [teams.id],
+  }),
+}));
 
 // Types
 export type User = typeof users.$inferSelect;
