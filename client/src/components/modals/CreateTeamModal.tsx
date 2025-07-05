@@ -36,33 +36,144 @@ interface AddPlayerModalProps {
 }
 
 function AddPlayerModal({ open, onOpenChange, onAddPlayer }: AddPlayerModalProps) {
-  const [playerName, setPlayerName] = useState("");
+  const [playerData, setPlayerData] = useState({
+    name: "",
+    role: "",
+    email: "",
+    phone: "",
+    gameId: "",
+    profilePic: ""
+  });
+
+  const roles = [
+    { value: "captain", label: "Captain" },
+    { value: "player", label: "Player" },
+    { value: "substitute", label: "Substitute" },
+    { value: "coach", label: "Coach" }
+  ];
+
+  const games = [
+    { value: "1", label: "Free Fire" },
+    { value: "2", label: "PUBG Mobile" },
+    { value: "3", label: "Call of Duty Mobile" },
+    { value: "4", label: "Valorant" }
+  ];
 
   const handleAddPlayer = () => {
-    if (playerName.trim()) {
-      onAddPlayer(playerName.trim());
-      setPlayerName("");
+    if (playerData.name.trim() && playerData.role && playerData.email.trim()) {
+      onAddPlayer(playerData.name.trim());
+      setPlayerData({
+        name: "",
+        role: "",
+        email: "",
+        phone: "",
+        gameId: "",
+        profilePic: ""
+      });
       onOpenChange(false);
     }
   };
 
+  const handleInputChange = (field: string, value: string) => {
+    setPlayerData(prev => ({ ...prev, [field]: value }));
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full max-w-md mx-4">
+      <DialogContent className="w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add Player</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
+          {/* Profile Picture */}
+          <div className="text-center">
+            <Label className="text-sm font-medium mb-2 block">Profile Picture</Label>
+            <div className="relative inline-block">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                <span className="text-white text-xl font-bold">
+                  {playerData.name?.charAt(0)?.toUpperCase() || "P"}
+                </span>
+              </div>
+              <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
+                <Upload className="w-6 h-6 text-white" />
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Click to upload image</p>
+          </div>
+
+          {/* Player Name */}
           <div>
-            <Label htmlFor="playerName">Player Name</Label>
+            <Label htmlFor="playerName">Player Name *</Label>
             <Input
               id="playerName"
-              value={playerName}
-              onChange={(e) => setPlayerName(e.target.value)}
+              value={playerData.name}
+              onChange={(e) => handleInputChange("name", e.target.value)}
               placeholder="Enter player name"
+              className="mt-1"
             />
           </div>
-          <div className="flex space-x-2">
+
+          {/* Player Role */}
+          <div>
+            <Label htmlFor="playerRole">Player Role *</Label>
+            <Select value={playerData.role} onValueChange={(value) => handleInputChange("role", value)}>
+              <SelectTrigger className="mt-1">
+                <SelectValue placeholder="Select player role" />
+              </SelectTrigger>
+              <SelectContent>
+                {roles.map((role) => (
+                  <SelectItem key={role.value} value={role.value}>
+                    {role.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Email */}
+          <div>
+            <Label htmlFor="playerEmail">Email *</Label>
+            <Input
+              id="playerEmail"
+              type="email"
+              value={playerData.email}
+              onChange={(e) => handleInputChange("email", e.target.value)}
+              placeholder="Enter email address"
+              className="mt-1"
+            />
+          </div>
+
+          {/* Phone */}
+          <div>
+            <Label htmlFor="playerPhone">Phone</Label>
+            <Input
+              id="playerPhone"
+              type="tel"
+              value={playerData.phone}
+              onChange={(e) => handleInputChange("phone", e.target.value)}
+              placeholder="Enter phone number"
+              className="mt-1"
+            />
+          </div>
+
+          {/* Game ID */}
+          <div>
+            <Label htmlFor="gameId">Game</Label>
+            <Select value={playerData.gameId} onValueChange={(value) => handleInputChange("gameId", value)}>
+              <SelectTrigger className="mt-1">
+                <SelectValue placeholder="Select primary game" />
+              </SelectTrigger>
+              <SelectContent>
+                {games.map((game) => (
+                  <SelectItem key={game.value} value={game.value}>
+                    {game.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex space-x-2 pt-4">
             <Button
               variant="outline"
               className="flex-1"
@@ -73,6 +184,7 @@ function AddPlayerModal({ open, onOpenChange, onAddPlayer }: AddPlayerModalProps
             <Button
               className="flex-1 bg-red-500 hover:bg-red-600"
               onClick={handleAddPlayer}
+              disabled={!playerData.name.trim() || !playerData.role || !playerData.email.trim()}
             >
               Add Player
             </Button>
