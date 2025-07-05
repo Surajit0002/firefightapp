@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import TournamentCard from "@/components/TournamentCard";
 import JoinTournamentModal from "@/components/modals/JoinTournamentModal";
 import { Tournament, Game } from "@shared/schema";
-import { Filter, Search, SlidersHorizontal, Trophy, Clock, Users } from "lucide-react";
+import { Filter, Search, SlidersHorizontal, Trophy, Clock, Users, Coins } from "lucide-react";
 
 export default function Tournaments() {
   const [selectedTournament, setSelectedTournament] = useState<Tournament | null>(null);
