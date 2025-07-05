@@ -12,6 +12,7 @@ import TournamentDetails from "./pages/TournamentDetails";
 import Teams from "./pages/Teams";
 import Wallet from "./pages/Wallet";
 import Profile from "./pages/Profile";
+import ProfileEnhanced from "./pages/ProfileEnhanced";
 import Leaderboard from "./pages/Leaderboard";
 import MatchRoom from "./pages/MatchRoom";
 import Referral from "./pages/Referral";
@@ -73,6 +74,12 @@ function Router() {
       <Route path="/profile">
         <Layout>
           <Profile />
+        </Layout>
+      </Route>
+
+      <Route path="/profile-enhanced">
+        <Layout>
+          <ProfileEnhanced />
         </Layout>
       </Route>
 

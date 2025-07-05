@@ -1,28 +1,47 @@
 import { ReactNode, useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Bell, Coins, Flame, Menu, X } from "lucide-react";
+import { 
+  Bell, Coins, Flame, Menu, X, Home, Trophy, Users, Crown, 
+  Gift, HelpCircle, Wallet, User, Search, MessageCircle,
+  Settings, LogOut, Gamepad2, Zap, Star
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/lib/auth";
+import { useQuery } from "@tanstack/react-query";
+import { Notification } from "@shared/schema";
+import Flag from "react-world-flags";
+import { countries } from "@/lib/countries";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const { data: notifications } = useQuery<Notification[]>({
+    queryKey: ["/api/users", user?.id, "notifications"],
+    enabled: !!user?.id,
+  });
+
+  const unreadCount = notifications?.filter(n => !n.read).length || 0;
+  const country = countries.find(c => c.code === user?.country);
 
   const navigation = [
-    { name: "Home", href: "/" },
-    { name: "Tournaments", href: "/tournaments" },
-    { name: "Teams", href: "/teams" },
-    { name: "Leaderboard", href: "/leaderboard" },
-    { name: "Referral", href: "/referral" },
-    { name: "Help", href: "/help" },
+    { name: "Home", href: "/", icon: Home },
+    { name: "Tournaments", href: "/tournaments", icon: Trophy },
+    { name: "Teams", href: "/teams", icon: Users },
+    { name: "Leaderboard", href: "/leaderboard", icon: Crown },
+    { name: "Referral", href: "/referral", icon: Gift },
+    { name: "Help", href: "/help", icon: HelpCircle },
   ];
 
   const isActive = (href: string) => {
@@ -55,55 +74,183 @@ export default function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white shadow-lg sticky top-0 z-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50">
+      {/* Enhanced Navigation */}
+      <nav className="bg-white/95 backdrop-blur-md shadow-xl sticky top-0 z-50 border-b border-red-100">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-red-500 to-yellow-500 rounded-lg flex items-center justify-center">
-                <Flame className="w-6 h-6 text-white" />
+          <div className="flex justify-between items-center h-20">
+            {/* Enhanced Logo */}
+            <Link href="/" className="flex items-center space-x-3 group">
+              <div className="w-12 h-12 bg-gradient-to-br from-red-500 via-orange-500 to-yellow-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <Flame className="w-7 h-7 text-white" />
               </div>
-              <span className="text-xl font-bold text-red-500">Fire Fight</span>
+              <div className="flex flex-col">
+                <span className="text-2xl font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
+                  Fire Fight
+                </span>
+                <span className="text-xs text-gray-500 -mt-1">Tournament Platform</span>
+              </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`text-gray-700 hover:text-red-500 transition duration-200 ${
-                    isActive(item.href) ? "text-red-500 font-semibold" : ""
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
+            {/* Search Bar */}
+            <div className="hidden lg:flex items-center flex-1 max-w-lg mx-8">
+              <div className="relative w-full">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Input
+                  type="text"
+                  placeholder="Search tournaments, teams, players..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 pr-4 py-2 bg-gray-50 border-gray-200 focus:bg-white focus:border-red-300 rounded-xl"
+                />
+              </div>
             </div>
 
-            {/* User Actions */}
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-1">
+              {navigation.map((item) => {
+                const IconComponent = item.icon;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-200 ${
+                      isActive(item.href) 
+                        ? "bg-red-100 text-red-600 font-semibold shadow-sm" 
+                        : "text-gray-600 hover:text-red-500 hover:bg-red-50"
+                    }`}
+                  >
+                    <IconComponent className="w-4 h-4" />
+                    <span className="text-sm">{item.name}</span>
+                  </Link>
+                );
+              })}
+            </div>
+
+            {/* Enhanced User Actions */}
             <div className="hidden md:flex items-center space-x-4">
-              <Link href="/wallet" className="flex items-center space-x-2 bg-gray-100 px-3 py-2 rounded-lg hover:bg-gray-200 transition duration-200">
-                <Coins className="w-4 h-4 text-yellow-500" />
-                <span className="text-sm font-semibold">₹{user.walletBalance}</span>
+              {/* Wallet Balance */}
+              <Link 
+                href="/wallet" 
+                className="flex items-center space-x-2 bg-gradient-to-r from-green-100 to-emerald-100 px-4 py-2 rounded-xl hover:from-green-200 hover:to-emerald-200 transition-all duration-200 border border-green-200 shadow-sm"
+              >
+                <Wallet className="w-4 h-4 text-green-600" />
+                <span className="text-sm font-bold text-green-700">₹{user.walletBalance}</span>
               </Link>
               
-              <Button variant="ghost" size="sm" className="relative">
-                <Bell className="w-5 h-5" />
-                <Badge className="absolute -top-2 -right-2 w-3 h-3 p-0 bg-red-500"></Badge>
-              </Button>
-              
-              <Avatar className="w-8 h-8">
-                <AvatarFallback className="bg-red-500 text-white text-sm">
-                  {user.username.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              
-              <Button variant="ghost" size="sm" onClick={logout}>
-                Logout
-              </Button>
+              {/* Bonus Coins Display */}
+              <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-100 to-amber-100 px-3 py-2 rounded-xl border border-yellow-200 shadow-sm">
+                <Star className="w-4 h-4 text-yellow-600" />
+                <span className="text-sm font-bold text-yellow-700">{user.bonusCoins || 0}</span>
+              </div>
+
+              {/* Notifications Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="relative p-2">
+                    <Bell className="w-5 h-5 text-gray-600" />
+                    {unreadCount > 0 && (
+                      <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 bg-red-500 text-white text-xs flex items-center justify-center">
+                        {unreadCount > 9 ? '9+' : unreadCount}
+                      </Badge>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-80">
+                  <div className="p-3 border-b">
+                    <h3 className="font-semibold text-gray-900">Notifications</h3>
+                    <p className="text-sm text-gray-500">{unreadCount} unread</p>
+                  </div>
+                  <div className="max-h-64 overflow-y-auto">
+                    {notifications?.slice(0, 5).map((notification) => (
+                      <DropdownMenuItem key={notification.id} className="p-3 border-b last:border-b-0">
+                        <div className="flex items-start space-x-3">
+                          <div className={`w-2 h-2 rounded-full mt-2 ${notification.read ? 'bg-gray-300' : 'bg-red-500'}`}></div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-900">{notification.title}</p>
+                            <p className="text-xs text-gray-500 truncate">{notification.message}</p>
+                            <p className="text-xs text-gray-400 mt-1">
+                              {new Date(notification.createdAt || '').toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                      </DropdownMenuItem>
+                    )) || (
+                      <div className="p-6 text-center text-gray-500">
+                        <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                        <p className="text-sm">No notifications</p>
+                      </div>
+                    )}
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* User Profile Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center space-x-3 p-2 hover:bg-gray-100 rounded-xl">
+                    <Avatar className="w-10 h-10 border-2 border-red-200">
+                      <AvatarFallback className="bg-gradient-to-br from-red-500 to-orange-500 text-white font-bold">
+                        {user.username.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col items-start">
+                      <span className="text-sm font-semibold text-gray-800">{user.username}</span>
+                      <div className="flex items-center space-x-1">
+                        {user.country && <Flag code={user.country} className="w-3 h-2 rounded-sm" />}
+                        <span className="text-xs text-gray-500">{country?.name}</span>
+                      </div>
+                    </div>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-64">
+                  <div className="p-3 border-b">
+                    <div className="flex items-center space-x-3">
+                      <Avatar className="w-12 h-12">
+                        <AvatarFallback className="bg-gradient-to-br from-red-500 to-orange-500 text-white font-bold">
+                          {user.username.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-semibold text-gray-900">{user.username}</p>
+                        <p className="text-sm text-gray-500">{user.email}</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <DropdownMenuItem onClick={() => setLocation('/profile')} className="p-3">
+                    <User className="w-4 h-4 mr-3" />
+                    <span>View Profile</span>
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuItem onClick={() => setLocation('/profile-enhanced')} className="p-3">
+                    <Zap className="w-4 h-4 mr-3" />
+                    <span>Enhanced Profile</span>
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuItem onClick={() => setLocation('/wallet')} className="p-3">
+                    <Wallet className="w-4 h-4 mr-3" />
+                    <span>Wallet & Transactions</span>
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuItem className="p-3">
+                    <Settings className="w-4 h-4 mr-3" />
+                    <span>Account Settings</span>
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuItem className="p-3">
+                    <MessageCircle className="w-4 h-4 mr-3" />
+                    <span>Support & Help</span>
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuSeparator />
+                  
+                  <DropdownMenuItem onClick={logout} className="p-3 text-red-600 focus:text-red-600">
+                    <LogOut className="w-4 h-4 mr-3" />
+                    <span>Logout</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
             {/* Mobile Menu Button */}
